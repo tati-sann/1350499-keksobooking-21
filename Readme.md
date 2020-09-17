@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Татьяна Санникова](https://up.htmlacademy.ru/javascript/21/user/1350499).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Шершнев](https://up.htmlacademy.ru/javascript/21/user/587797).
 
 ---
 
