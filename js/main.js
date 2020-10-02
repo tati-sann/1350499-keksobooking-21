@@ -9,22 +9,33 @@ const TITLE = `Заголовок`;
 const TYPE = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKS = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const DESCRIPTTION = `Описание`;
+const DESCRIPTION = `Описание`;
 const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-const MIN_LOCATION_X = 0;
-const MAX_LOCATION_X = map.offsetWidth;
-const MIN_LOCATION_Y = 130;
-const MAX_LOCATION_Y = 630;
-const MIN_PRICE = 10000;
-const MAX_PRICE = 100000;
-const MIN_ROOMS = 1;
-const MAX_ROOMS = 5;
-const MIN_GUESTS = 0;
-const MAX_GUESTS = 5;
+const LOCATION_X = {
+  MIN: 0,
+  MAX: map.offsetWidth
+};
+const LOCATION_Y = {
+  MIN: 130,
+  MAX: 630
+};
+const PRICE = {
+  MIN: 10000,
+  MAX: 100000
+};
+const ROOMS = {
+  MIN: 1,
+  MAX: 5
+};
+
+const GUESTS = {
+  MIN: 0,
+  MAX: 5
+};
 
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
-const getRandomArray = (array) => {
+const getRandomItems = (array) => {
   const newArray = array.slice();
   for (let i = 1; i <= getRandomInt(0, array.length); i++) {
     const arrayItem = getRandomItem(newArray);
@@ -37,8 +48,8 @@ const generatePins = () => {
   const pinsData = [];
 
   for (let i = 1; i <= PINS; i++) {
-    const xLocation = getRandomInt(MIN_LOCATION_X, MAX_LOCATION_X);
-    const yLocation = getRandomInt(MIN_LOCATION_Y, MAX_LOCATION_Y);
+    const xLocation = getRandomInt(LOCATION_X.MIN, LOCATION_X.MAX);
+    const yLocation = getRandomInt(LOCATION_Y.MIN, LOCATION_Y.MAX);
 
     pinsData.push(
         {
@@ -47,16 +58,16 @@ const generatePins = () => {
           },
           offer: {
             title: `${TITLE} № ${i}`,
-            address: xLocation + `, ` + yLocation,
-            price: getRandomInt(MIN_PRICE, MAX_PRICE),
+            address: `${xLocation}, ${yLocation}`,
+            price: getRandomInt(PRICE.MIN, PRICE.MAX),
             type: getRandomItem(TYPE),
-            rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
-            guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
+            rooms: getRandomInt(ROOMS.MIN, ROOMS.MAX),
+            guests: getRandomInt(GUESTS.MIN, GUESTS.MAX),
             checkin: getRandomItem(CHECKS),
-            chechout: getRandomItem(CHECKS),
-            features: getRandomArray(FEATURES),
-            description: `${DESCRIPTTION} № ${i}`,
-            photos: getRandomArray(PHOTOS),
+            checkout: getRandomItem(CHECKS),
+            features: getRandomItems(FEATURES),
+            description: `${DESCRIPTION} № ${i}`,
+            photos: getRandomItems(PHOTOS),
           },
           location: {
             x: xLocation,
@@ -76,7 +87,8 @@ const getPinsTemplate = (data) => {
     const pinElement = pinTemplate.cloneNode(true);
     const img = pinElement.querySelector(`img`);
 
-    pinElement.style = `left: ${pinData.location.x - img.width / 2}px; top: ${pinData.location.y - img.height}px;`;
+    pinElement.style.left = `${pinData.location.x - img.width / 2}px`;
+    pinElement.style.top = `${pinData.location.y - img.height}px`;
     img.src = pinData.author.avatar;
     img.alt = pinData.offer.title;
 
