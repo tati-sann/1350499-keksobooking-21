@@ -1,51 +1,66 @@
 "use strict";
 // module3-task1
-// удаление класса .map--faded у .map
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
-// массив из 8 сгенерированных JS объектов
 const PINS = 8;
-// рандомное целое цисло
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-// рандомный элемент
-const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
+const AVATAR_DIR = `img/avatars/user0`;
+const TITLE = `Заголовок`;
+const TYPE = [`palace`, `flat`, `house`, `bungalow`];
+const CHECKS = [`12:00`, `13:00`, `14:00`];
+const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const DESCRIPTTION = `Описание`;
+const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const MIN_LOCATION_X = 0;
+const MAX_LOCATION_X = map.offsetWidth;
+const MIN_LOCATION_Y = 130;
+const MAX_LOCATION_Y = 630;
+const MIN_PRICE = 10000;
+const MAX_PRICE = 100000;
+const MIN_ROOMS = 1;
+const MAX_ROOMS = 5;
+const MIN_GUESTS = 0;
+const MAX_GUESTS = 5;
 
-// фун-ция
-const generatePinsArray = () => {
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
+const getRandomArray = (array) => {
+  const newArray = array.slice();
+  for (let i = 1; i <= getRandomInt(0, array.length); i++) {
+    const arrayItem = getRandomItem(newArray);
+    newArray.splice(newArray.indexOf(arrayItem), 1);
+  }
+  return newArray;
+};
+
+const generatePins = () => {
   const pinsData = [];
-  const avatarDir = `img/avatars/user0`;
-  const title = `Заголовок`;
-  const type = [`palace`, `flat`, `house`, `bungalow`];
-  const checkin = [`12:00`, `13:00`, `14:00`];
-  const chechout = [`12:00`, `13:00`, `14:00`];
-  const features = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-  const description = `Описание`;
-  const photos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 
   for (let i = 1; i <= PINS; i++) {
-    // элементы добавляем в конец массива
+    const xLocation = getRandomInt(MIN_LOCATION_X, MAX_LOCATION_X);
+    const yLocation = getRandomInt(MIN_LOCATION_Y, MAX_LOCATION_Y);
+
     pinsData.push(
         {
           author: {
-            avatar: avatarDir + i + `.png`,
+            avatar: `${AVATAR_DIR}${i}.png`,
           },
           offer: {
-            title: title + ` № ` + i,
-            address: getRandomInt(0, 600) + `, ` + getRandomInt(0, 600),
-            price: getRandomInt(1000, 5000),
-            type: getRandomItem(type),
-            rooms: getRandomInt(1, 5),
-            guests: getRandomInt(2, 10),
-            checkin: getRandomItem(checkin),
-            chechout: getRandomItem(chechout),
-            features: getRandomItem(features),
-            description: description + ` № ` + i,
-            photos: getRandomItem(photos),
+            title: `${TITLE} № ${i}`,
+            address: xLocation + `, ` + yLocation,
+            price: getRandomInt(MIN_PRICE, MAX_PRICE),
+            type: getRandomItem(TYPE),
+            rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
+            guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
+            checkin: getRandomItem(CHECKS),
+            chechout: getRandomItem(CHECKS),
+            features: getRandomArray(FEATURES),
+            description: `${DESCRIPTTION} № ${i}`,
+            photos: getRandomArray(PHOTOS),
           },
           location: {
-            x: getRandomInt(0, map.offsetWidth),
-            y: getRandomInt(130, 630),
+            x: xLocation,
+            y: yLocation,
           }
         }
     );
@@ -53,8 +68,7 @@ const generatePinsArray = () => {
   return pinsData;
 };
 
-// заполняем шаблон
-const getPins = (data) => {
+const getPinsTemplate = (data) => {
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const pinsFragment = document.createDocumentFragment();
 
@@ -72,7 +86,6 @@ const getPins = (data) => {
   return pinsFragment;
 };
 
-// добавляем в разметку
-const mapPins = generatePinsArray();
+const mapPins = generatePins();
 const placePins = document.querySelector(`.map__pins`);
-placePins.append(getPins(mapPins));
+placePins.append(getPinsTemplate(mapPins));
