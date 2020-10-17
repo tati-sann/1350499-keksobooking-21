@@ -4,7 +4,7 @@ const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 const filtersContainer = document.querySelector(`.map__filters-container`);
 
-const ELEMENTS = 8;
+const PINS_NUMBER = 8;
 const AVATAR_DIR = `img/avatars/user0`;
 const TITLE = `Заголовок`;
 const TYPE = [`palace`, `flat`, `house`, `bungalow`];
@@ -54,13 +54,13 @@ const getRandomItems = (array) => {
 };
 
 const getHousingInformation = () => {
-  const data = [];
+  const HousingData = [];
 
-  for (let i = 1; i <= ELEMENTS; i++) {
-    const xLocation = getRandomInt(locationX.min, locationX.max);
-    const yLocation = getRandomInt(locationY.min, locationY.max);
+  for (let i = 1; i <= PINS_NUMBER; i++) {
+    const xLocation = getRandomInt(LocationX.MIN, LocationX.MAX);
+    const yLocation = getRandomInt(LocationY.MIN, LocationY.MAX);
 
-    data.push(
+    HousingData.push(
         {
           author: {
             avatar: `${AVATAR_DIR}${i}.png`,
@@ -68,10 +68,10 @@ const getHousingInformation = () => {
           offer: {
             title: `${TITLE} № ${i}`,
             address: `${xLocation}, ${yLocation}`,
-            price: getRandomInt(price.min, price.max),
+            price: getRandomInt(Price.MIN, Price.MAX),
             type: getRandomItem(TYPE),
-            rooms: getRandomInt(rooms.min, rooms.max),
-            guests: getRandomInt(guests.min, guests.max),
+            rooms: getRandomInt(Rooms.MIN, Rooms.MAX),
+            guests: getRandomInt(Guests.MIN, Guests.MAX),
             checkin: getRandomItem(CHECKS),
             checkout: getRandomItem(CHECKS),
             features: getRandomItems(FEATURES),
@@ -85,13 +85,13 @@ const getHousingInformation = () => {
         }
     );
   }
-  return data;
+  return HousingData;
 };
 
-const getPins = (data) => {
+const getPins = (pinsData) => {
   const pinFragment = document.createDocumentFragment();
 
-  data.forEach((pinData) => {
+  pinsData.forEach((pinData) => {
     const pinElement = pinTemplate.cloneNode(true);
     const img = pinElement.querySelector(`img`);
 
@@ -113,45 +113,49 @@ placePins.append(getPins(mapPins));
 // module3-task2
 
 // ф-йия склонения слов
-const getDecl = (number, txt, cases = [2, 0, 1, 1, 1, 2]) => txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+const getDeclination = (number, txt, cases = [2, 0, 1, 1, 1, 2]) => txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 
 
-const createCard = (data) => {
+const createAnnouncementCard = (cardsData) => {
   const cardElement = cardTemplate.cloneNode(true);
   const cardPhotos = cardElement.querySelector(`.popup__photos`);
-  const cardPhoto = cardElement.querySelector(`.popup__photo`);
+  const cardPhoto = cardPhotos.querySelector(`.popup__photo`);
   const cardFeatures = cardElement.querySelector(`.popup__features`);
 
-  cardElement.querySelector(`.popup__title`).textContent = data.offer.title;
-  cardElement.querySelector(`.popup__text--address`).textContent = data.offer.address;
-  cardElement.querySelector(`.popup__text--price`).textContent = `${data.offer.price}₽/ночь`;
-  cardElement.querySelector(`.popup__type`).textContent = housingType[data.offer.type];
-  cardElement.querySelector(`.popup__text--capacity`).textContent = `${data.offer.rooms} ${getDecl(data.offer.rooms, [`комната`, `комнаты`, `комнат`])} для ${data.offer.guests} ${getDecl(data.offer.guests, [`гостя`, `гостей`, `гостей`])}`;
-  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
-  cardElement.querySelector(`.popup__description`).textContent = data.offer.description;
-  cardElement.querySelector(`.popup__avatar`).src = data.author.avatar;
+  cardElement.querySelector(`.popup__title`).textContent = cardsData.offer.title;
+  cardElement.querySelector(`.popup__text--address`).textContent = cardsData.offer.address;
+  cardElement.querySelector(`.popup__text--price`).textContent = `${cardsData.offer.price}₽/ночь`;
+  cardElement.querySelector(`.popup__type`).textContent = housingType[cardsData.offer.type];
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${cardsData.offer.rooms} ${getDeclination(cardsData.offer.rooms, [`комната`, `комнаты`, `комнат`])} для ${cardsData.offer.guests} ${getDeclination(cardsData.offer.guests, [`гостя`, `гостей`, `гостей`])}`;
+  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${cardsData.offer.checkin}, выезд до ${cardsData.offer.checkout}`;
+  cardElement.querySelector(`.popup__description`).textContent = cardsData.offer.description;
+  cardElement.querySelector(`.popup__avatar`).src = cardsData.author.avatar;
 
   // photos
-  while (cardPhotos.firstChild) {
-    cardPhotos.removeChild(cardPhotos.firstChild);
+  if (cardsData.offer.photos) {
+    cardPhotos.innerHTML = ``;
+    cardsData.offer.photos.forEach((photo) => {
+      const photoElement = cardPhoto.cloneNode(true);
+      photoElement.src = photo;
+      cardPhotos.append(photoElement);
+    });
+  } else {
+    cardPhotos.remove();
   }
-  for (let i = 0; i < data.offer.photos.length; i++) {
-    const photoElement = cardPhoto.cloneNode(true);
-    photoElement.src = `${data.offer.photos[i]}`;
-    cardPhotos.appendChild(photoElement);
-  }
+
   // features
-  while (cardFeatures.firstChild) {
-    cardFeatures.removeChild(cardFeatures.firstChild);
-  }
-  for (let i = 0; i < data.offer.features.length; i++) {
-    let featureElement = document.createElement(`li`);
-    featureElement.classList.add(`popup__feature`);
-    featureElement.classList.add(`popup__feature--${data.offer.features[i]}`);
-    cardFeatures.appendChild(featureElement);
+  if (cardsData.offer.features) {
+    cardFeatures.innerHTML = ``;
+    cardsData.offer.features.forEach((feature) => {
+      const featureElement = document.createElement(`li`);
+      featureElement.classList.add(`popup__feature`, `popup__feature--${feature}`);
+      cardFeatures.append(featureElement);
+    });
+  } else {
+    cardFeatures.remove();
   }
 
   map.insertBefore(cardElement, filtersContainer);
 };
 
-createCard(mapPins[0]);
+createAnnouncementCard(mapPins[0]);
