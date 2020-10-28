@@ -1,18 +1,10 @@
 "use strict";
-// module3-task1
 const map = document.querySelector(`.map`);
-// const filtersContainer = document.querySelector(`.map__filters-container`);
-const placePins = document.querySelector(`.map__pins`);
 
 const PINS_NUMBER = 8;
 const AVATAR_DIR = `img/avatars/user0`;
 const TITLE = `Заголовок`;
 const TYPE = [`palace`, `flat`, `house`, `bungalow`];
-/* const housingType = {
-  palace: `Дворец`,
-  flat: `Квартира`,
-  house: `Дом`,
-  bungalow: `Бунгало`}; */
 const CHECKS = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 const DESCRIPTION = `Описание`;
@@ -38,9 +30,6 @@ const Guests = {
   MIN: 0,
   MAX: 5
 };
-
-const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
@@ -88,6 +77,10 @@ const getHousingInformation = () => {
   return housingData;
 };
 
+// pins
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
 const getPins = (pinsData) => {
   const pinFragment = document.createDocumentFragment();
 
@@ -101,19 +94,36 @@ const getPins = (pinsData) => {
     img.alt = pinData.offer.title;
 
     pinFragment.append(pinElement);
+
+    pinElement.addEventListener(`click`, () => {
+      createCard(getAnnouncementCard(pinData));
+    });
   });
 
   return pinFragment;
 };
 
-// module3-task2
+const placePins = document.querySelector(`.map__pins`);
+const mapPins = getHousingInformation();
+const createPins = () => {
+  placePins.append(getPins(mapPins));
+};
 
-// ф-йия склонения слов
-// const getDeclination = (number, txt, cases = [2, 0, 1, 1, 1, 2]) => txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+// card
+const filtersContainer = document.querySelector(`.map__filters-container`);
 
+const housingType = {
+  palace: `Дворец`,
+  flat: `Квартира`,
+  house: `Дом`,
+  bungalow: `Бунгало`
+};
 
-/* const createAnnouncementCard = (cardsData) => {
+const getDeclination = (number, txt, cases = [2, 0, 1, 1, 1, 2]) => txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+
+const getAnnouncementCard = (cardsData) => {
   const cardElement = cardTemplate.cloneNode(true);
+  const popupClose = cardElement.querySelector(`.popup__close`);
   const cardPhotos = cardElement.querySelector(`.popup__photos`);
   const cardPhoto = cardPhotos.querySelector(`.popup__photo`);
   const cardFeatures = cardElement.querySelector(`.popup__features`);
@@ -127,7 +137,6 @@ const getPins = (pinsData) => {
   cardElement.querySelector(`.popup__description`).textContent = cardsData.offer.description;
   cardElement.querySelector(`.popup__avatar`).src = cardsData.author.avatar;
 
-  // photos
   if (cardsData.offer.photos) {
     cardPhotos.innerHTML = ``;
     cardsData.offer.photos.forEach((photo) => {
@@ -139,7 +148,6 @@ const getPins = (pinsData) => {
     cardPhotos.remove();
   }
 
-  // features
   if (cardsData.offer.features) {
     cardFeatures.innerHTML = ``;
     cardsData.offer.features.forEach((feature) => {
@@ -151,21 +159,60 @@ const getPins = (pinsData) => {
     cardFeatures.remove();
   }
 
+  popupClose.addEventListener(`click`, () => {
+    cardElement.remove();
+  });
+
+  document.addEventListener(`keydown`, (evt) => {
+    if (evt.key === `Escape`) {
+      cardElement.remove();
+    }
+  });
+
+  return cardElement;
+};
+
+const removeCard = () => {
+  const card = map.querySelector(`.map__card`);
+  if (card) {
+    card.remove();
+  }
+};
+
+const createCard = (cardElement) => {
+  removeCard();
   map.insertBefore(cardElement, filtersContainer);
 };
 
-createAnnouncementCard(mapPins[0]);
- */
-
-// module4-task1
+// form
 const adForm = document.querySelector(`.ad-form`);
 const adFormFieldset = adForm.querySelectorAll(`fieldset`);
 const mainPin = document.querySelector(`.map__pin--main`);
 const address = adForm.querySelector(`#address`);
+const roomNumber = adForm.querySelector(`#room_number`);
+const capacity = adForm.querySelector(`#capacity`);
+const title = adForm.querySelector(`#title`);
+const titleSymbols = {
+  MIN: 30,
+  MAX: 100
+};
+const price = adForm.querySelector(`#price`);
+const priceMax = 1000000;
+const PriceMin = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+const type = adForm.querySelector(`#type`);
+const timeIn = adForm.querySelector(`#timein`);
+const timeOut = adForm.querySelector(`#timeout`);
+const avatar = adForm.querySelector(`#avatar`);
+const images = adForm.querySelector(`#images`);
 const MAIN_PIN_POINTER_HEIGHT = 10;
 
 // address
-const getAddress = () => {
+const setAddress = () => {
   const xLocation = Math.round(parseInt(mainPin.style.left, 10) + mainPin.clientWidth / 2);
   const yLocation = (map.classList.contains(`map--faded`)) ?
     (Math.round(parseInt(mainPin.style.top, 10) + mainPin.clientHeight / 2)) :
@@ -174,25 +221,120 @@ const getAddress = () => {
   address.value = `${xLocation}, ${yLocation}`;
 };
 
-// disactivate
+// validate room
+const validateRooms = () => {
+  const roomNumberValue = parseInt(roomNumber.value, 10);
+  const capacityValue = parseInt(capacity.value, 10);
+  let validationMessage = ``;
+
+  if (roomNumberValue < capacityValue) {
+    validationMessage = `Недопустимое количество гостей для выбранного количества комнат`;
+  } else if (roomNumberValue < 100 && capacityValue === 0) {
+    validationMessage = `Для данного количества комнат необходимо выбрать количество гостей`;
+  } else if (roomNumberValue === 100 && capacityValue > 0) {
+    validationMessage = `Выбранное количество комнат не предназначено для гостей`;
+  } else {
+    capacity.valid = true;
+  }
+
+  capacity.setCustomValidity(validationMessage);
+};
+
+// validate title
+const validateTitle = () => {
+  title.setAttribute(`required`, `true`);
+  title.setAttribute(`minlength`, titleSymbols.MIN);
+  title.setAttribute(`maxlength`, titleSymbols.MAX);
+};
+
+// validate price
+const validatePrice = () => {
+  price.setAttribute(`required`, `true`);
+  price.setAttribute(`max`, priceMax);
+
+  if (type.value === `bungalow`) {
+    price.setAttribute(`min`, PriceMin.bungalo);
+  } else if (type.value === `flat`) {
+    price.setAttribute(`min`, PriceMin.flat);
+  } else if (type.value === `house`) {
+    price.setAttribute(`min`, PriceMin.house);
+  } else if (type.value === `palace`) {
+    price.setAttribute(`min`, PriceMin.palace);
+  }
+};
+// readonly address
+const readonlyAddress = () => {
+  address.setAttribute(`readonly`, `true`);
+};
+
+// synchronize times
+const synchronizeTimes = (time, value) => {
+  time.value = value;
+};
+
+// img
+const limitImage = () => {
+  [avatar, images].forEach((input) => {
+    input.setAttribute(`accept`, `image/*`);
+  });
+};
+
+// validate form
+const validateForm = () => {
+  [roomNumber, capacity].forEach((input) => {
+    input.addEventListener(`change`, () => {
+      validateRooms();
+    });
+  });
+
+  title.addEventListener(`change`, () => {
+    validateTitle();
+  });
+
+  [price, type].forEach((input) => {
+    input.addEventListener(`change`, () => {
+      validatePrice();
+    });
+  });
+
+  timeIn.addEventListener(`change`, () => {
+    synchronizeTimes(timeOut, timeIn.value);
+  });
+
+  timeOut.addEventListener(`change`, () => {
+    synchronizeTimes(timeIn, timeOut.value);
+  });
+
+  validateRooms();
+  validateTitle();
+  validatePrice();
+  readonlyAddress();
+  limitImage();
+};
+
+// page
+// disactivate page
 const disactivatePage = () => {
   map.classList.add(`map--faded`);
   adForm.classList.add(`ad-form--disabled`);
   adFormFieldset.forEach((fieldset) => fieldset.setAttribute(`disabled`, `true`));
-  getAddress();
+  setAddress();
 };
 disactivatePage();
-// active
+
+// active page
 const activatePage = () => {
   map.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
   adFormFieldset.forEach((fieldset) => fieldset.removeAttribute(`disabled`));
-  placePins.append(getPins(getHousingInformation()));
-  getAddress();
+  setAddress();
+  createPins();
+  validateForm();
 };
 
+const MOUSE_BUTTON_LEFT = 0;
 mainPin.addEventListener(`mousedown`, (evt) => {
-  if (evt.button === 0) {
+  if (evt.button === MOUSE_BUTTON_LEFT) {
     activatePage();
   }
 });
@@ -203,33 +345,3 @@ mainPin.addEventListener(`keydown`, (evt) => {
     activatePage();
   }
 });
-
-// validate
-const roomNumber = adForm.querySelector(`#room_number`);
-const capacity = adForm.querySelector(`#capacity`);
-
-const validateRooms = () => {
-  const roomNumberValue = parseInt(roomNumber.value, 10);
-  const capacityValue = parseInt(capacity.value, 10);
-
-  if (roomNumberValue < capacityValue) {
-    capacity.setCustomValidity(`Недопустимое количество гостей для выбранного количества комнат`);
-  } else if (roomNumberValue < 100 && capacityValue === 0) {
-    capacity.setCustomValidity(`Для данного количества комнат необходимо выбрать количество гостей`);
-  } else if (roomNumberValue === 100 && capacityValue > 0) {
-    capacity.setCustomValidity(`Выбранное количество комнат не предназначено для гостей`);
-  } else {
-    capacity.valid = true;
-    capacity.setCustomValidity(``);
-  }
-};
-
-roomNumber.addEventListener(`change`, () => {
-  validateRooms();
-});
-
-capacity.addEventListener(`change`, () => {
-  validateRooms();
-});
-
-validateRooms();
