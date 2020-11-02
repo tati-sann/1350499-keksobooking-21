@@ -68,7 +68,7 @@
       if (dragged) {
         const onClickPreventDefault = (clickEvt) => {
           clickEvt.preventDefault();
-          mainPin.removeEventListener(`click`, onClickPreventDefault)
+          mainPin.removeEventListener(`click`, onClickPreventDefault);
         };
         mainPin.addEventListener(`click`, onClickPreventDefault);
       }
