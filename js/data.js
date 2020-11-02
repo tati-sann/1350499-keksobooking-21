@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const map = document.querySelector(`.map`); // убрать
+  const map = document.querySelector(`.map`);
   const PINS_NUMBER = 8;
   const AVATAR_DIR = `img/avatars/user0`;
   const TITLE = `Заголовок`;
@@ -11,7 +11,7 @@
   const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
   const LocationX = {
     MIN: 0,
-    MAX: map.offsetWidth // map
+    MAX: map.offsetWidth
   };
   const LocationY = {
     MIN: 130,

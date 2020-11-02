@@ -26,7 +26,8 @@
   };
 
   const createPins = () => {
-    window.map.placePins.append(getPins(mapPins));
+    const placePins = document.querySelector(`.map__pins`);
+    placePins.append(getPins(mapPins));
   };
 
   window.pins = {

@@ -70,9 +70,11 @@
   };
 
   const createCard = (card) => {
+    const map = document.querySelector(`.map`);
+    const filtersContainer = document.querySelector(`.map__filters-container`);
     removeCard();
     document.addEventListener(`keydown`, onCardEscPress);
-    window.map.map.insertBefore(card, window.map.filtersContainer);
+    map.insertBefore(card, filtersContainer);
   };
 
   window.card = {
