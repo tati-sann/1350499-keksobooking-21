@@ -43,15 +43,6 @@
     adForm.classList.remove(`ad-form--disabled`);
   };
 
-  const setAddress = () => {
-    const xLocation = Math.round(parseInt(window.mainPin.pin.style.left, 10) + window.mainPin.pin.clientWidth / 2);
-    const yLocation = (window.map.map.classList.contains(`map--faded`)) ?
-      (Math.round(parseInt(window.mainPin.pin.style.top, 10) + window.mainPin.pin.clientHeight / 2)) :
-      (Math.round(parseInt(window.mainPin.pin.style.top, 10) + window.mainPin.pin.clientHeight + window.mainPin.pointer));
-
-    address.value = `${xLocation}, ${yLocation}`;
-  };
-
   const validateRooms = () => {
     const roomNumberValue = parseInt(roomNumber.value, 10);
     const capacityValue = parseInt(capacity.value, 10);
@@ -142,7 +133,6 @@
     enableFieldset,
     disableForm,
     enableForm,
-    setAddress,
     validateForm
   };
 })();
