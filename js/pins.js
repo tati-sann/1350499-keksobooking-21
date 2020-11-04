@@ -28,9 +28,9 @@
     }
 
     document.querySelector(`.map__pins`).append(pinFragment);
-  }
+  };
 
   window.pins = {
     successHandler
-  }
+  };
 })();

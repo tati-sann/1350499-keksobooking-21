@@ -9,7 +9,7 @@
   const LimitСoordinatesX = {
     MIN: 0,
     MAX: map.offsetWidth
-  }
+  };
   const LimitСoordinatesY = {
     MIN: 130,
     MAX: 630
