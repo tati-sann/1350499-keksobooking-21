@@ -16,7 +16,7 @@ const activatePage = () => {
   window.form.enableForm();
   window.mainPin.setAddress();
   window.form.validateForm();
-  window.pins.createPins();
+  window.server.load(window.pins.successHandler, window.util.errorHandler);
 };
 
 const mainPinRemoveEventListener = () => {

@@ -1,36 +1,36 @@
 'use strict';
 (() => {
-  const mapPins = window.data.getHousingInformation();
+  const MAX_PINS = 5;
 
-  const getPins = (pinsData) => {
-    const pinFragment = document.createDocumentFragment();
+  const getPin = (pinData) => {
+    const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+    const pinElement = pinTemplate.cloneNode(true);
+    const img = pinElement.querySelector(`img`);
 
-    pinsData.forEach((pinData) => {
-      const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-      const pinElement = pinTemplate.cloneNode(true);
-      const img = pinElement.querySelector(`img`);
+    pinElement.style.left = `${pinData.location.x - img.width / 2}px`;
+    pinElement.style.top = `${pinData.location.y - img.height}px`;
+    img.src = pinData.author.avatar;
+    img.alt = pinData.offer.title;
 
-      pinElement.style.left = `${pinData.location.x - img.width / 2}px`;
-      pinElement.style.top = `${pinData.location.y - img.height}px`;
-      img.src = pinData.author.avatar;
-      img.alt = pinData.offer.title;
-
-      pinFragment.append(pinElement);
-
-      pinElement.addEventListener(`click`, () => {
-        window.card.createCard(window.card.getCard(pinData));
-      });
+    pinElement.addEventListener(`click`, () => {
+      window.card.createCard(window.card.getCard(pinData));
     });
 
-    return pinFragment;
+    return pinElement;
   };
 
-  const createPins = () => {
-    const placePins = document.querySelector(`.map__pins`);
-    placePins.append(getPins(mapPins));
-  };
+  const successHandler = (pinsData) => {
+    const pinFragment = document.createDocumentFragment();
+    let count = pinsData.length < MAX_PINS ? pinsData.length : MAX_PINS;
+
+    for (let i = 0; i < count; i++) {
+      pinFragment.appendChild(getPin(pinsData[i]));
+    }
+
+    document.querySelector(`.map__pins`).append(pinFragment);
+  }
 
   window.pins = {
-    createPins
-  };
+    successHandler
+  }
 })();
