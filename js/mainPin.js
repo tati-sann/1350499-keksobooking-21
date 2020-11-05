@@ -4,15 +4,23 @@
   const mainPin = document.querySelector(`.map__pin--main`);
   const address = document.querySelector(`#address`);
   const MAIN_PIN_POINTER_HEIGHT = 10;
-  const MAIN_PIN_HEIGHT = mainPin.offsetHeight + MAIN_PIN_POINTER_HEIGHT;
-  const MAIN_PIN_HALF_WIDTH = Math.floor(mainPin.offsetWidth / 2);
+  const mainPinHeight = mainPin.offsetHeight + MAIN_PIN_POINTER_HEIGHT;
+  const mainPinHalfWidth = Math.floor(mainPin.offsetWidth / 2);
+  const LimitСoordinatesX = {
+    MIN: 0,
+    MAX: map.offsetWidth
+  };
+  const LimitСoordinatesY = {
+    MIN: 130,
+    MAX: 630
+  };
   const MainPinLocationX = {
-    MIN: 0 - MAIN_PIN_HALF_WIDTH,
-    MAX: map.offsetWidth - MAIN_PIN_HALF_WIDTH
+    MIN: LimitСoordinatesX.MIN - mainPinHalfWidth,
+    MAX: LimitСoordinatesX.MAX - mainPinHalfWidth
   };
   const MainPinLocationY = {
-    MIN: 130 - MAIN_PIN_HEIGHT,
-    MAX: 630 - MAIN_PIN_HEIGHT
+    MIN: LimitСoordinatesY.MIN - mainPinHeight,
+    MAX: LimitСoordinatesY.MAX - mainPinHeight
   };
 
   mainPin.addEventListener(`mousedown`, (evt) => {
@@ -56,7 +64,7 @@
       mainPin.style.top = `${mainPinY}px`;
       mainPin.style.left = `${mainPinX}px`;
 
-      address.value = `${mainPinX + MAIN_PIN_HALF_WIDTH}, ${mainPinY + MAIN_PIN_HEIGHT}`;
+      address.value = `${mainPinX + mainPinHalfWidth}, ${mainPinY + mainPinHeight}`;
     };
 
     const onMouseUp = (upEvt) => {
@@ -82,7 +90,7 @@
     const xLocation = Math.round(parseInt(mainPin.style.left, 10) + mainPin.clientWidth / 2);
     const yLocation = (map.classList.contains(`map--faded`)) ?
       (Math.round(parseInt(mainPin.style.top, 10) + mainPin.clientHeight / 2)) :
-      (Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN_HEIGHT));
+      (Math.round(parseInt(mainPin.style.top, 10) + mainPinHeight));
 
     address.value = `${xLocation}, ${yLocation}`;
   };
