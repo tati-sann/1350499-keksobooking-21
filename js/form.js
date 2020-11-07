@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const adForm = document.querySelector(`.ad-form`);
+  const resetButton = adForm.querySelector(`.ad-form__reset`);
   const adFormFieldset = adForm.querySelectorAll(`fieldset`);
   const address = adForm.querySelector(`#address`);
   const roomNumber = adForm.querySelector(`#room_number`);
@@ -127,6 +128,30 @@
     readonlyAddress();
     limitImage();
   };
+
+  const onSuccess = () => {
+    adForm.reset();
+    window.message.successMessage();
+    window.main.disactivatePage();
+  };
+
+  const onError = () => {
+    window.message.errorMessage();
+  };
+
+  const onFormSubmit = (evt) => {
+    evt.preventDefault();
+    window.server.upload(new FormData(adForm), onSuccess, onError);
+  };
+
+  adForm.addEventListener(`submit`, onFormSubmit);
+
+  resetButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    adForm.reset();
+    window.mainPin.getStartСoordinates();
+    window.mainPin.setAddress();
+  });
 
   window.form = {
     disableFieldset,

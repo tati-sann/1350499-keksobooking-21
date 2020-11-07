@@ -6,6 +6,10 @@
   const MAIN_PIN_POINTER_HEIGHT = 10;
   const mainPinHeight = mainPin.offsetHeight + MAIN_PIN_POINTER_HEIGHT;
   const mainPinHalfWidth = Math.floor(mainPin.offsetWidth / 2);
+  const MainPinStartСoordinates = {
+    X: 375,
+    Y: 570,
+  };
   const LimitСoordinatesX = {
     MIN: 0,
     MAX: map.offsetWidth
@@ -95,8 +99,14 @@
     address.value = `${xLocation}, ${yLocation}`;
   };
 
+  const getStartСoordinates = () => {
+    mainPin.style.top = `${MainPinStartСoordinates.X}px`;
+    mainPin.style.left = `${MainPinStartСoordinates.Y}px`;
+  };
+
   window.mainPin = {
-    setAddress
+    setAddress,
+    getStartСoordinates
   };
 })();
 

@@ -21,7 +21,7 @@
 
   const successHandler = (pinsData) => {
     const pinFragment = document.createDocumentFragment();
-    let count = pinsData.length < MAX_PINS ? pinsData.length : MAX_PINS;
+    const count = pinsData.length < MAX_PINS ? pinsData.length : MAX_PINS;
 
     for (let i = 0; i < count; i++) {
       pinFragment.appendChild(getPin(pinsData[i]));
@@ -30,7 +30,18 @@
     document.querySelector(`.map__pins`).append(pinFragment);
   };
 
+  const removePins = () => {
+    const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+    if (pins) {
+      pins.forEach((pin) => {
+        pin.remove();
+      });
+    }
+  };
+
   window.pins = {
-    successHandler
+    successHandler,
+    removePins
   };
 })();

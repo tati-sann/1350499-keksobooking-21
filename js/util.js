@@ -32,18 +32,10 @@
     }
   };
 
-  const errorHandler = (errorMessage) => {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: #a5142a;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `24px`;
-    node.style.color = `#ed8b77`;
-
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
+  const isDocumentClickEvent = (action) => {
+    document.addEventListener(`click`, () => {
+      action();
+    });
   };
 
   window.util = {
@@ -54,6 +46,6 @@
     isEscEvent,
     isEnterEvent,
     isMouseButtonLeftEvent,
-    errorHandler
+    isDocumentClickEvent
   };
 })();
