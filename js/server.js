@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
+  const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
   const TIMEOUT = 5000;
   const StatusCode = {
     OK: 200,
@@ -9,7 +10,7 @@
     SERVER_ERROR: 500
   };
 
-  const load = (onSuccess, onError) => {
+  const geRequest = (onSuccess, onError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
@@ -45,11 +46,25 @@
       onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
     });
 
+    return xhr;
+  };
+
+  const load = (onSuccess, onError) => {
+    const xhr = geRequest(onSuccess, onError);
+
     xhr.open(`GET`, URL_LOAD);
     xhr.send();
   };
 
+  const upload = (data, onSuccess, onError) => {
+    const xhr = geRequest(onSuccess, onError);
+
+    xhr.open(`POST`, URL_UPLOAD);
+    xhr.send(data);
+  };
+
   window.server = {
-    load
+    load,
+    upload
   };
 })();

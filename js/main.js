@@ -1,42 +1,49 @@
 'use strict';
-const mainPin = document.querySelector(`.map__pin--main`);
-// disactivate page
-const disactivatePage = () => {
-  window.map.disableMap();
-  window.form.disableForm();
-  window.form.disableFieldset();
-  window.mainPin.setAddress();
-};
-disactivatePage();
+(() => {
+  const mainPin = document.querySelector(`.map__pin--main`);
+  const mainPinRemoveEventListener = () => {
+    mainPin.removeEventListener(`mousedown`, activatePageOnMouse);
+    mainPin.removeEventListener(`keydown`, activatePageOnEnter);
+  };
 
-// active page
-const activatePage = () => {
-  window.map.enableMap();
-  window.form.enableFieldset();
-  window.form.enableForm();
-  window.mainPin.setAddress();
-  window.form.validateForm();
-  window.server.load(window.pins.successHandler, window.util.errorHandler);
-};
+  const mainPinAddEventListener = () => {
+    mainPin.addEventListener(`mousedown`, activatePageOnMouse);
+    mainPin.addEventListener(`keydown`, activatePageOnEnter);
+  };
 
-const mainPinRemoveEventListener = () => {
-  mainPin.removeEventListener(`mousedown`, activatePageOnMouse);
-  mainPin.removeEventListener(`keydown`, activatePageOnEnter);
-};
+  const activatePageOnMouse = (evt) => {
+    window.util.isMouseButtonLeftEvent(evt, activatePage);
+    mainPinRemoveEventListener();
+  };
 
-const mainPinAddEventListener = () => {
-  mainPin.addEventListener(`mousedown`, activatePageOnMouse);
-  mainPin.addEventListener(`keydown`, activatePageOnEnter);
-};
+  const activatePageOnEnter = (evt) => {
+    window.util.isEnterEvent(evt, activatePage);
+    mainPinRemoveEventListener();
+  };
+  mainPinAddEventListener();
 
-const activatePageOnMouse = (evt) => {
-  window.util.isMouseButtonLeftEvent(evt, activatePage);
-  mainPinRemoveEventListener();
-};
+  const disactivatePage = () => {
+    window.map.disableMap();
+    window.form.disableForm();
+    window.form.disableFieldset();
+    window.mainPin.setAddress();
+    window.pins.removePins();
+    window.mainPin.getStartСoordinates();
+    mainPinAddEventListener();
+  };
+  disactivatePage();
 
-const activatePageOnEnter = (evt) => {
-  window.util.isEnterEvent(evt, activatePage);
-  mainPinRemoveEventListener();
-};
+  const activatePage = () => {
+    window.map.enableMap();
+    window.form.enableFieldset();
+    window.form.enableForm();
+    window.mainPin.setAddress();
+    window.form.validateForm();
+    window.server.load(window.pins.successHandler, window.message.errorHandler);
+  };
 
-mainPinAddEventListener();
+  window.main = {
+    disactivatePage
+  };
+})();
+
