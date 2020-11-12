@@ -12,7 +12,9 @@
     let pins = window.pins.getPins();
     return pins.filter((pin) => {
       let flag = true;
-      if (!getHousingTypeFilter(pin)) flag = false;
+      if (!getHousingTypeFilter(pin)) {
+        flag = false;
+      }
       return flag;
     });
   };
