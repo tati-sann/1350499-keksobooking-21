@@ -28,22 +28,6 @@
     palace: 10000
   };
 
-  const disableFieldset = () => {
-    adFormFieldset.forEach((fieldset) => fieldset.setAttribute(`disabled`, `true`));
-  };
-
-  const enableFieldset = () => {
-    adFormFieldset.forEach((fieldset) => fieldset.removeAttribute(`disabled`));
-  };
-
-  const disableForm = () => {
-    adForm.classList.add(`ad-form--disabled`);
-  };
-
-  const enableForm = () => {
-    adForm.classList.remove(`ad-form--disabled`);
-  };
-
   const validateRooms = () => {
     const roomNumberValue = parseInt(roomNumber.value, 10);
     const capacityValue = parseInt(capacity.value, 10);
@@ -129,8 +113,32 @@
     limitImage();
   };
 
-  const onSuccess = () => {
+  const disableFieldset = () => {
+    adFormFieldset.forEach((fieldset) => fieldset.setAttribute(`disabled`, `true`));
+  };
+
+  const enableFieldset = () => {
+    adFormFieldset.forEach((fieldset) => fieldset.removeAttribute(`disabled`));
+  };
+
+  const resetForm = () => {
     adForm.reset();
+  };
+
+  const disableForm = () => {
+    adForm.classList.add(`ad-form--disabled`);
+    disableFieldset();
+    resetForm();
+  };
+
+  const enableForm = () => {
+    adForm.classList.remove(`ad-form--disabled`);
+    enableFieldset();
+    validateForm();
+  };
+
+  const onSuccess = () => {
+    resetForm();
     window.message.successMessage();
     window.main.disactivatePage();
   };
@@ -148,16 +156,11 @@
 
   resetButton.addEventListener(`click`, (evt) => {
     evt.preventDefault();
-    adForm.reset();
-    window.mainPin.getStartСoordinates();
-    window.mainPin.setAddress();
+    window.main.disactivatePage();
   });
 
   window.form = {
-    disableFieldset,
-    enableFieldset,
     disableForm,
-    enableForm,
-    validateForm
+    enableForm
   };
 })();
