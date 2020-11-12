@@ -78,6 +78,7 @@
 
   window.card = {
     getCard,
-    createCard
+    createCard,
+    removeCard
   };
 })();

@@ -10,7 +10,7 @@
     SERVER_ERROR: 500
   };
 
-  const geRequest = (onSuccess, onError) => {
+  const getRequest = (onSuccess, onError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
@@ -50,14 +50,14 @@
   };
 
   const load = (onSuccess, onError) => {
-    const xhr = geRequest(onSuccess, onError);
+    const xhr = getRequest(onSuccess, onError);
 
     xhr.open(`GET`, URL_LOAD);
     xhr.send();
   };
 
   const upload = (data, onSuccess, onError) => {
-    const xhr = geRequest(onSuccess, onError);
+    const xhr = getRequest(onSuccess, onError);
 
     xhr.open(`POST`, URL_UPLOAD);
     xhr.send(data);

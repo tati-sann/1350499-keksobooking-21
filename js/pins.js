@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const MAX_PINS = 5;
+  let PINS = [];
 
   const getPin = (pinData) => {
     const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
@@ -19,7 +20,11 @@
     return pinElement;
   };
 
-  const successHandler = (pinsData) => {
+  const getPins = () => {
+    return PINS;
+  };
+
+  const renderPins = (pinsData) => {
     const pinFragment = document.createDocumentFragment();
     const count = pinsData.length < MAX_PINS ? pinsData.length : MAX_PINS;
 
@@ -28,6 +33,11 @@
     }
 
     document.querySelector(`.map__pins`).append(pinFragment);
+  };
+
+  const successHandler = (pinsData) => {
+    PINS = pinsData;
+    renderPins(pinsData);
   };
 
   const removePins = () => {
@@ -42,6 +52,9 @@
 
   window.pins = {
     successHandler,
-    removePins
+    removePins,
+    getPin,
+    renderPins,
+    getPins
   };
 })();

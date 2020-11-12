@@ -25,20 +25,18 @@
   const disactivatePage = () => {
     window.map.disableMap();
     window.form.disableForm();
-    window.form.disableFieldset();
     window.mainPin.setAddress();
     window.pins.removePins();
     window.mainPin.getStartСoordinates();
+    window.card.removeCard();
     mainPinAddEventListener();
   };
   disactivatePage();
 
   const activatePage = () => {
     window.map.enableMap();
-    window.form.enableFieldset();
     window.form.enableForm();
     window.mainPin.setAddress();
-    window.form.validateForm();
     window.server.load(window.pins.successHandler, window.message.errorHandler);
   };
 
