@@ -3,6 +3,15 @@
   const MAX_PINS = 5;
   let PINS = [];
 
+  const getPins = () => PINS;
+
+  const removeClassActivePin = () => {
+    const activePin = document.querySelector(`.map__pin--active`);
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
+  };
+
   const getPin = (pinData) => {
     const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
     const pinElement = pinTemplate.cloneNode(true);
@@ -14,14 +23,12 @@
     img.alt = pinData.offer.title;
 
     pinElement.addEventListener(`click`, () => {
+      removeClassActivePin();
+      pinElement.classList.add(`map__pin--active`);
       window.card.createCard(window.card.getCard(pinData));
     });
 
     return pinElement;
-  };
-
-  const getPins = () => {
-    return PINS;
   };
 
   const renderPins = (pinsData) => {
