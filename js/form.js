@@ -58,12 +58,16 @@
 
     if (type.value === `bungalow`) {
       price.setAttribute(`min`, PriceMin.bungalo);
+      price.setAttribute(`placeholder`, PriceMin.bungalo);
     } else if (type.value === `flat`) {
       price.setAttribute(`min`, PriceMin.flat);
+      price.setAttribute(`placeholder`, PriceMin.flat);
     } else if (type.value === `house`) {
       price.setAttribute(`min`, PriceMin.house);
+      price.setAttribute(`placeholder`, PriceMin.house);
     } else if (type.value === `palace`) {
       price.setAttribute(`min`, PriceMin.palace);
+      price.setAttribute(`placeholder`, PriceMin.palace);
     }
   };
 

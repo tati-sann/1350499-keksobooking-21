@@ -20,7 +20,6 @@
     window.util.isEnterEvent(evt, activatePage);
     mainPinRemoveEventListener();
   };
-  mainPinAddEventListener();
 
   const disactivatePage = () => {
     window.map.disableMap();
@@ -29,6 +28,7 @@
     window.pins.removePins();
     window.mainPin.getStartСoordinates();
     window.card.removeCard();
+    window.filter.disableFilter();
     mainPinAddEventListener();
   };
   disactivatePage();
@@ -38,6 +38,7 @@
     window.form.enableForm();
     window.mainPin.setAddress();
     window.server.load(window.pins.successHandler, window.message.errorHandler);
+    window.filter.enableFilter();
   };
 
   window.main = {
