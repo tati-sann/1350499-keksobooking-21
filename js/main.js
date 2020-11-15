@@ -29,6 +29,7 @@ const disactivatePage = () => {
   window.card.removeCard();
   window.filter.disableFilter();
   mainPinAddEventListener();
+  window.image.resetPreview();
 };
 disactivatePage();
 
@@ -38,6 +39,7 @@ const activatePage = () => {
   window.mainPin.setAddress();
   window.server.load(window.pins.successHandler, window.message.errorHandler);
   window.filter.enableFilter();
+  window.image.changePreview();
 };
 
 window.main = {

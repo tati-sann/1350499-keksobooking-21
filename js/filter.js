@@ -10,31 +10,36 @@ const Price = {
   MAX: 50000
 };
 
-const getHousingTypeFilter = (pin) => housingTypeFilter.value === VALUE_ANY || pin.offer.type === housingTypeFilter.value;
-const getHousingRoomsFilter = (pin) => housingRoomsFilter.value === VALUE_ANY ? true : pin.offer.rooms === Number(housingRoomsFilter.value);
-const getHousingGuestsFilter = (pin) => housingGuestsFilter.value === VALUE_ANY ? true : pin.offer.guests === Number(housingGuestsFilter.value);
-const getHousingPriceFilter = (pin) => {
+const getHousingTypeFilter = (type) => housingTypeFilter.value === VALUE_ANY || type === housingTypeFilter.value;
+const getHousingRoomsFilter = (rooms) => housingRoomsFilter.value === VALUE_ANY || rooms === Number(housingRoomsFilter.value);
+const getHousingGuestsFilter = (guests) => housingGuestsFilter.value === VALUE_ANY || guests === Number(housingGuestsFilter.value);
+const getHousingPriceFilter = (price) => {
   switch (housingPriceFilter.value) {
     case (`middle`):
-      return pin.offer.price >= Price.MIN && pin.offer.price <= Price.MAX;
+      return price >= Price.MIN && price <= Price.MAX;
     case (`low`):
-      return pin.offer.price <= Price.MIN;
+      return price <= Price.MIN;
     case (`high`):
-      return pin.offer.price >= Price.MAX;
+      return price >= Price.MAX;
     default:
       return housingPriceFilter.value === VALUE_ANY;
   }
 };
-const getHousingFeatureFilter = (pin) => {
-  const houseFeature = Array.from(mapFilters.querySelectorAll(`.map__checkbox:checked`));
-  return houseFeature.every((item) => {
-    return pin.offer.features.includes(item.value);
-  });
+const getHousingFeatureFilter = (features) => {
+  return Array
+    .from(mapFilters.querySelectorAll(`.map__checkbox:checked`))
+    .every((item) => {
+      return features.includes(item.value);
+    });
 };
 
 const filteredPins = () => {
   return window.pins.getPins().filter((pin) => {
-    return getHousingTypeFilter(pin) && getHousingRoomsFilter(pin) && getHousingGuestsFilter(pin) && getHousingPriceFilter(pin) && getHousingFeatureFilter(pin);
+    return getHousingTypeFilter(pin.offer.type) &&
+    getHousingRoomsFilter(pin.offer.rooms) &&
+    getHousingGuestsFilter(pin.offer.guests) &&
+    getHousingPriceFilter(pin.offer.price) &&
+    getHousingFeatureFilter(pin.offer.features);
   });
 };
 
