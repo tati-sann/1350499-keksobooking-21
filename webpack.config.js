@@ -10,6 +10,7 @@ module.exports = {
     './js/mainPin.js',
     './js/card.js',
     './js/form.js',
+    './js/image.js',
     './js/map.js',
     './js/filter.js',
     './js/main.js'
