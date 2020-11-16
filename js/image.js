@@ -11,11 +11,7 @@ const onLoadChange = (evt, cb) => {
   const file = evt.target.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPES.some((it) => {
-    return fileName.endsWith(it);
-  });
-
-  if (matches) {
+  if (FILE_TYPES.some((it) => fileName.endsWith(it))) {
     const reader = new FileReader();
 
     reader.addEventListener(`load`, () => {
