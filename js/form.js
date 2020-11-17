@@ -1,7 +1,9 @@
 'use strict';
+const ROOM_MAX = 100;
+const ROOM_MIN = 0;
+const PRICE_MAX = 1000000;
 const adForm = document.querySelector(`.ad-form`);
 const resetButton = adForm.querySelector(`.ad-form__reset`);
-const adFormFieldset = adForm.querySelectorAll(`fieldset`);
 const address = adForm.querySelector(`#address`);
 const roomNumber = adForm.querySelector(`#room_number`);
 const capacity = adForm.querySelector(`#capacity`);
@@ -12,14 +14,10 @@ const timeIn = adForm.querySelector(`#timein`);
 const timeOut = adForm.querySelector(`#timeout`);
 const avatar = adForm.querySelector(`#avatar`);
 const images = adForm.querySelector(`#images`);
-
-const ROOM_MAX = 100;
-const ROOM_MIN = 0;
 const TitleSymbols = {
   MIN: 30,
   MAX: 100
 };
-const PRICE_MAX = 1000000;
 const PriceMin = {
   bungalo: 0,
   flat: 1000,
@@ -55,22 +53,27 @@ const validatePrice = () => {
   price.setAttribute(`required`, `true`);
   price.setAttribute(`max`, PRICE_MAX);
 
-  if (type.value === `bungalow`) {
-    price.setAttribute(`min`, PriceMin.bungalo);
-    price.setAttribute(`placeholder`, PriceMin.bungalo);
-  } else if (type.value === `flat`) {
-    price.setAttribute(`min`, PriceMin.flat);
-    price.setAttribute(`placeholder`, PriceMin.flat);
-  } else if (type.value === `house`) {
-    price.setAttribute(`min`, PriceMin.house);
-    price.setAttribute(`placeholder`, PriceMin.house);
-  } else if (type.value === `palace`) {
-    price.setAttribute(`min`, PriceMin.palace);
-    price.setAttribute(`placeholder`, PriceMin.palace);
+  switch (type.value) {
+    case (`bungalow`):
+      price.setAttribute(`min`, PriceMin.bungalo);
+      price.setAttribute(`placeholder`, PriceMin.bungalo);
+      break;
+    case (`flat`):
+      price.setAttribute(`min`, PriceMin.flat);
+      price.setAttribute(`placeholder`, PriceMin.flat);
+      break;
+    case (`house`):
+      price.setAttribute(`min`, PriceMin.house);
+      price.setAttribute(`placeholder`, PriceMin.house);
+      break;
+    case (`palace`):
+      price.setAttribute(`min`, PriceMin.palace);
+      price.setAttribute(`placeholder`, PriceMin.palace);
+      break;
   }
 };
 
-const readonlyAddress = () => {
+const getReadonlyAddress = () => {
   address.setAttribute(`readonly`, `true`);
 };
 
@@ -112,16 +115,8 @@ const validateForm = () => {
   validateRooms();
   validateTitle();
   validatePrice();
-  readonlyAddress();
+  getReadonlyAddress();
   limitImage();
-};
-
-const disableFieldset = () => {
-  adFormFieldset.forEach((fieldset) => fieldset.setAttribute(`disabled`, `true`));
-};
-
-const enableFieldset = () => {
-  adFormFieldset.forEach((fieldset) => fieldset.removeAttribute(`disabled`));
 };
 
 const resetForm = () => {
@@ -130,24 +125,24 @@ const resetForm = () => {
 
 const disableForm = () => {
   adForm.classList.add(`ad-form--disabled`);
-  disableFieldset();
+  window.util.setDisabled(adForm.children);
   resetForm();
 };
 
 const enableForm = () => {
   adForm.classList.remove(`ad-form--disabled`);
-  enableFieldset();
+  window.util.removeDisabled(adForm.children);
   validateForm();
 };
 
 const onSuccess = () => {
   resetForm();
-  window.message.successMessage();
+  window.message.getSuccessMessage();
   window.main.disactivatePage();
 };
 
 const onError = () => {
-  window.message.errorMessage();
+  window.message.getErrorMessage();
 };
 
 const onFormSubmit = (evt) => {

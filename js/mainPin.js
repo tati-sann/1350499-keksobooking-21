@@ -1,29 +1,29 @@
 'use strict';
+const MAIN_PIN_POINTER_HEIGHT = 10;
 const map = document.querySelector(`.map`);
 const mainPin = document.querySelector(`.map__pin--main`);
 const address = document.querySelector(`#address`);
-const MAIN_PIN_POINTER_HEIGHT = 10;
 const mainPinHeight = mainPin.offsetHeight + MAIN_PIN_POINTER_HEIGHT;
 const mainPinHalfWidth = Math.floor(mainPin.offsetWidth / 2);
-const MainPinStartСoordinates = {
+const MainPinStartCoords = {
   X: 375,
   Y: 570,
 };
-const LimitСoordinatesX = {
+const LimitCoordsX = {
   MIN: 0,
   MAX: map.offsetWidth
 };
-const LimitСoordinatesY = {
+const LimitCoordsY = {
   MIN: 130,
   MAX: 630
 };
 const MainPinLocationX = {
-  MIN: LimitСoordinatesX.MIN - mainPinHalfWidth,
-  MAX: LimitСoordinatesX.MAX - mainPinHalfWidth
+  MIN: LimitCoordsX.MIN - mainPinHalfWidth,
+  MAX: LimitCoordsX.MAX - mainPinHalfWidth
 };
 const MainPinLocationY = {
-  MIN: LimitСoordinatesY.MIN - mainPinHeight,
-  MAX: LimitСoordinatesY.MAX - mainPinHeight
+  MIN: LimitCoordsY.MIN - mainPinHeight,
+  MAX: LimitCoordsY.MAX - mainPinHeight
 };
 
 mainPin.addEventListener(`mousedown`, (evt) => {
@@ -98,12 +98,12 @@ const setAddress = () => {
   address.value = `${xLocation}, ${yLocation}`;
 };
 
-const getStartСoordinates = () => {
-  mainPin.style.top = `${MainPinStartСoordinates.X}px`;
-  mainPin.style.left = `${MainPinStartСoordinates.Y}px`;
+const getStartCoords = () => {
+  mainPin.style.top = `${MainPinStartCoords.X}px`;
+  mainPin.style.left = `${MainPinStartCoords.Y}px`;
 };
 
 window.mainPin = {
   setAddress,
-  getStartСoordinates
+  getStartCoords
 };

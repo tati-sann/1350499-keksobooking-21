@@ -1,10 +1,10 @@
 'use strict';
+const VALUE_ANY = `any`;
 const mapFilters = document.querySelector(`.map__filters`);
 const housingTypeFilter = mapFilters.querySelector(`#housing-type`);
 const housingPriceFilter = mapFilters.querySelector(`#housing-price`);
 const housingRoomsFilter = mapFilters.querySelector(`#housing-rooms`);
 const housingGuestsFilter = mapFilters.querySelector(`#housing-guests`);
-const VALUE_ANY = `any`;
 const Price = {
   MIN: 10000,
   MAX: 50000
@@ -28,8 +28,8 @@ const getHousingPriceFilter = (price) => {
 const getHousingFeatureFilter = (features) => {
   return Array
     .from(mapFilters.querySelectorAll(`.map__checkbox:checked`))
-    .every((item) => {
-      return features.includes(item.value);
+    .every((element) => {
+      return features.includes(element.value);
     });
 };
 
@@ -55,10 +55,12 @@ const resetFilter = () => {
 
 const disableFilter = () => {
   resetFilter();
+  window.util.setDisabled(mapFilters.children);
   mapFilters.removeEventListener(`change`, onFilterChange);
 };
 
 const enableFilter = () => {
+  window.util.removeDisabled(mapFilters.children);
   mapFilters.addEventListener(`change`, onFilterChange);
 };
 

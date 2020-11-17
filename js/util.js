@@ -27,10 +27,24 @@ const isDocumentClickEvent = (action) => {
   });
 };
 
+const setDisabled = (element) => {
+  for (let el of element) {
+    el.setAttribute(`disabled`, `true`);
+  }
+};
+
+const removeDisabled = (element) => {
+  for (let el of element) {
+    el.removeAttribute(`disabled`);
+  }
+};
+
 window.util = {
   getDeclination,
   isEscEvent,
   isEnterEvent,
   isMouseButtonLeftEvent,
-  isDocumentClickEvent
+  isDocumentClickEvent,
+  setDisabled,
+  removeDisabled
 };

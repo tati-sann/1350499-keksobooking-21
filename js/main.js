@@ -1,21 +1,21 @@
 'use strict';
 const mainPin = document.querySelector(`.map__pin--main`);
 const mainPinRemoveEventListener = () => {
-  mainPin.removeEventListener(`mousedown`, activatePageOnMouse);
-  mainPin.removeEventListener(`keydown`, activatePageOnEnter);
+  mainPin.removeEventListener(`mousedown`, onPageClick);
+  mainPin.removeEventListener(`keydown`, onPagePressEnter);
 };
 
 const mainPinAddEventListener = () => {
-  mainPin.addEventListener(`mousedown`, activatePageOnMouse);
-  mainPin.addEventListener(`keydown`, activatePageOnEnter);
+  mainPin.addEventListener(`mousedown`, onPageClick);
+  mainPin.addEventListener(`keydown`, onPagePressEnter);
 };
 
-const activatePageOnMouse = (evt) => {
+const onPageClick = (evt) => {
   window.util.isMouseButtonLeftEvent(evt, activatePage);
   mainPinRemoveEventListener();
 };
 
-const activatePageOnEnter = (evt) => {
+const onPagePressEnter = (evt) => {
   window.util.isEnterEvent(evt, activatePage);
   mainPinRemoveEventListener();
 };
@@ -25,7 +25,7 @@ const disactivatePage = () => {
   window.form.disableForm();
   window.mainPin.setAddress();
   window.pins.removePins();
-  window.mainPin.getStartСoordinates();
+  window.mainPin.getStartCoords();
   window.card.removeCard();
   window.filter.disableFilter();
   mainPinAddEventListener();
@@ -37,7 +37,7 @@ const activatePage = () => {
   window.map.enableMap();
   window.form.enableForm();
   window.mainPin.setAddress();
-  window.server.load(window.pins.successHandler, window.message.errorHandler);
+  window.server.load(window.pins.successHandler, window.message.getErrorHandler);
   window.filter.enableFilter();
   window.image.changePreview();
 };

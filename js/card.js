@@ -25,7 +25,7 @@ const getCard = (cardData) => {
   cardElement.querySelector(`.popup__avatar`).src = cardData.author.avatar;
 
   if (cardData.offer.photos) {
-    cardPhotos.innerHTML = ``;
+    cardPhotos.textContent = ``;
     cardData.offer.photos.forEach((photo) => {
       const photoElement = cardPhoto.cloneNode(true);
       photoElement.src = photo;
@@ -36,7 +36,7 @@ const getCard = (cardData) => {
   }
 
   if (cardData.offer.features) {
-    cardFeatures.innerHTML = ``;
+    cardFeatures.textContent = ``;
     cardData.offer.features.forEach((feature) => {
       const featureElement = document.createElement(`li`);
       featureElement.classList.add(`popup__feature`, `popup__feature--${feature}`);
