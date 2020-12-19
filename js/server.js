@@ -1,5 +1,5 @@
 'use strict';
-const TIMEOUT = 5000;
+const TIMEOUT = 6000;
 const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
 const StatusCode = {
